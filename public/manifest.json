@@ -1,0 +1,11 @@
+{
+  "name": "Шпион",
+  "short_name": "Шпион",
+  "description": "Партийная игра для компании — найди шпиона",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "lang": "ru",
+  "orientation": "portrait"
+}
