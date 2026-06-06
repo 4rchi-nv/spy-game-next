@@ -17,6 +17,10 @@ export function normalizePlayerNames(
   }));
 }
 
+export function getMaxSpies(playerCount: number): number {
+  return Math.max(1, Math.floor(playerCount / 2));
+}
+
 export function validateGameSettings(
   settings: Omit<GameSettings, "players"> & {
     playerCount: number;
@@ -45,10 +49,10 @@ export function validateGameSettings(
       message: "Минимум 1 шпион",
     });
   }
-  if (settings.spiesCount > 3) {
+  if (settings.spiesCount > getMaxSpies(settings.playerCount)) {
     errors.push({
       field: "spiesCount",
-      message: "Максимум 3 шпиона",
+      message: `Максимум ${getMaxSpies(settings.playerCount)} шпион(ов) для ${settings.playerCount} игроков`,
     });
   }
 

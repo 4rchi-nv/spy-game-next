@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { PageContainer } from "@/components/ui/PageContainer";
 import { useGame } from "@/components/game/GameProvider";
 
@@ -21,11 +22,7 @@ export default function GameVotePage() {
   }, [isReady, state, router]);
 
   if (!isReady || !state) {
-    return (
-      <PageContainer title="Голосование" backHref="/game/discussion">
-        <p className="text-slate-400 text-center py-12">Загрузка...</p>
-      </PageContainer>
-    );
+    return <LoadingScreen />;
   }
 
   const { game } = state;

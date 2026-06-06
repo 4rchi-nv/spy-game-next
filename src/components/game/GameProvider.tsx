@@ -29,7 +29,8 @@ interface GameContextValue {
   startGame: (settings: GameSettings, category: Category) => void;
   setPhase: (phase: GamePhase) => void;
   revealCard: () => void;
-  hideCardAndNext: () => void;
+  hideCard: () => void;
+  advanceToNextPlayer: () => void;
   setVotedPlayer: (playerId: string) => void;
   resetGame: () => void;
 }
@@ -88,7 +89,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setState((prev) => (prev ? { ...prev, cardRevealed: true } : prev));
   }, []);
 
-  const hideCardAndNext = useCallback(() => {
+  const hideCard = useCallback(() => {
+    setState((prev) => (prev ? { ...prev, cardRevealed: false } : prev));
+  }, []);
+
+  const advanceToNextPlayer = useCallback(() => {
     setState((prev) => {
       if (!prev) return prev;
       return {
@@ -118,7 +123,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
         startGame,
         setPhase,
         revealCard,
-        hideCardAndNext,
+        hideCard,
+        advanceToNextPlayer,
         setVotedPlayer,
         resetGame,
       }}

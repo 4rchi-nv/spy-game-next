@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { PageContainer } from "@/components/ui/PageContainer";
 import { useGame } from "@/components/game/GameProvider";
 import {
@@ -17,6 +18,7 @@ import {
   getCategoryById,
 } from "@/lib/words/wordsRepository";
 import {
+  getMaxSpies,
   getValidationMessage,
   normalizePlayerNames,
   validateGameSettings,
@@ -50,12 +52,17 @@ export default function GameSetupPage() {
   );
 
   const category = getCategoryById(db, categoryId);
+  const maxSpies = getMaxSpies(playerCount);
 
   const updateForm = (patch: Partial<typeof form>) => {
     setForm((prev) => {
       const next = { ...prev, ...patch };
       if (patch.playerCount !== undefined) {
         next.playerNames = resizePlayerNames(prev.playerNames, patch.playerCount);
+        const newMax = getMaxSpies(patch.playerCount);
+        if (next.spiesCount > newMax) {
+          next.spiesCount = newMax;
+        }
       }
       if (patch.mode !== undefined && patch.mode !== prev.mode) {
         const cats = db.categories.filter((c) =>
@@ -94,11 +101,7 @@ export default function GameSetupPage() {
   };
 
   if (!isReady) {
-    return (
-      <PageContainer title="Настройка игры" backHref="/">
-        <p className="text-slate-400 text-center py-12">Загрузка...</p>
-      </PageContainer>
-    );
+    return <LoadingScreen />;
   }
 
   return (
@@ -162,15 +165,18 @@ export default function GameSetupPage() {
           <input
             type="range"
             min={1}
-            max={3}
-            value={spiesCount}
+            max={maxSpies}
+            value={Math.min(spiesCount, maxSpies)}
             onChange={(e) => updateForm({ spiesCount: Number(e.target.value) })}
             className="w-full accent-indigo-500"
           />
           <div className="flex justify-between text-xs text-slate-500 mt-1">
             <span>1</span>
-            <span>3</span>
+            <span>{maxSpies}</span>
           </div>
+          <p className="text-xs text-slate-500 mt-1">
+            Шпионов должно быть меньше, чем обычных игроков
+          </p>
         </div>
 
         <div>
