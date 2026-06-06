@@ -17,7 +17,7 @@ export function PageContainer({
   backLabel = "Назад",
 }: PageContainerProps) {
   return (
-    <div className="min-h-full flex flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950">
+    <div className="min-h-dvh flex flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950">
       <div className="mx-auto w-full max-w-lg flex-1 flex flex-col px-4 py-6 pb-10">
         {backHref && (
           <Link
